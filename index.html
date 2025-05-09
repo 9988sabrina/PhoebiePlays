@@ -80,6 +80,29 @@
     function showSurprise() {
       alert("🌟 You’re magical and creative, just like Phoebie! Keep going! 🌈🎨");
     }
-  </script>
+  </script> 
+<script>
+  // Fairy dust colors
+  const colors = ['#FFC0CB', '#FFD700', '#ADD8E6', '#FFFFFF', '#90EE90'];
+
+  document.addEventListener("mousemove", function(e) {
+    const sparkle = document.createElement("div");
+    sparkle.textContent = "✨";
+    sparkle.style.position = "absolute";
+    sparkle.style.left = e.pageX + "px";
+    sparkle.style.top = e.pageY + "px";
+    sparkle.style.pointerEvents = "none";
+    sparkle.style.fontSize = "18px";
+    sparkle.style.zIndex = 9999;
+    sparkle.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+    document.body.appendChild(sparkle);
+
+    setTimeout(() => {
+      sparkle.remove();
+    }, 500);
+  });
+</script>
+
 </body>
 </html>
