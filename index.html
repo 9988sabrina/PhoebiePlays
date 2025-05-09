@@ -5,13 +5,13 @@
   <title>PhoebiePlays Launch Countdown</title>
   <style>
     body {
-      background: linear-gradient(to right, #84fab0, #8fd3f4);
+      background: linear-gradient(to right, #f6d365, #fda085);
       color: white;
       font-family: 'Comic Sans MS', cursive, sans-serif;
       text-align: center;
-      padding-top: 100px;
-      height: 100vh;
+      padding-top: 80px;
       margin: 0;
+      height: 100vh;
     }
     h1 {
       font-size: 3em;
@@ -23,7 +23,22 @@
     }
     #countdown {
       font-size: 2em;
-      margin-top: 20px;
+      margin: 20px 0;
+    }
+    button {
+      background: #ff69b4;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 1.2em;
+      padding: 10px 25px;
+      cursor: pointer;
+      box-shadow: 2px 2px 8px #000;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background: #ff1493;
+      transform: scale(1.1);
     }
   </style>
 </head>
@@ -32,10 +47,11 @@
   <p>🌟 Countdown to Launch Day 🌟</p>
   <div id="countdown">Loading...</div>
 
-  <script>
-    // 🌟 Set your launch date here (Year, Month-1, Day, Hour, Minute)
-    const launchDate = new Date("2025-05-12T08:00:00");
+  <button onclick="showSurprise()">🎁 Click here for a surprise!</button>
 
+  <script>
+    // Countdown Timer
+    const launchDate = new Date("2025-05-15T08:00:00");
     function updateCountdown() {
       const now = new Date();
       const timeLeft = launchDate - now;
@@ -56,7 +72,11 @@
 
     setInterval(updateCountdown, 1000);
     updateCountdown();
+
+    // Surprise function
+    function showSurprise() {
+      alert("🌟 You’re magical and creative, just like Phoebie! Keep going! 🌈🎨");
+    }
   </script>
 </body>
 </html>
-
