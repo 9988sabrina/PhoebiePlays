@@ -1,41 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Welcome to PhoebiePlays!</title>
-    <style>
-        body {
-            background: linear-gradient(to right, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            color: #ffffff;
-            animation: backgroundMove 10s infinite alternate;
-        }
-        h1 {
-            font-size: 3em;
-            margin: 0.5em;
-            text-shadow: 2px 2px 8px #000000;
-        }
-        p {
-            font-size: 1.5em;
-            margin: 0.5em;
-            text-shadow: 1px 1px 5px #000000;
-        }
-        @keyframes backgroundMove {
-            0% { background-position: left; }
-            100% { background-position: right; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>PhoebiePlays Launch Countdown</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #84fab0, #8fd3f4);
+      color: white;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 3em;
+      text-shadow: 2px 2px 8px #000;
+    }
+    p {
+      font-size: 1.5em;
+      text-shadow: 1px 1px 5px #000;
+    }
+    #countdown {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h1>🌟 Phoebie’s Magical World is Coming Soon! 🌟</h1>
-    <p>✨ Stay tuned for fun, art, and amazing adventures! ✨</p>
+  <h1>🎉 Phoebie’s Magical World is Coming!</h1>
+  <p>🌟 Countdown to Launch Day 🌟</p>
+  <div id="countdown">Loading...</div>
+
+  <script>
+    // 🌟 Set your launch date here (Year, Month-1, Day, Hour, Minute)
+    const launchDate = new Date("2025-05-15T08:00:00");
+
+    function updateCountdown() {
+      const now = new Date();
+      const timeLeft = launchDate - now;
+
+      if (timeLeft <= 0) {
+        document.getElementById("countdown").innerHTML = "🚀 We Are Live!";
+        return;
+      }
+
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+      const seconds = Math.floor((timeLeft / 1000) % 60);
+
+      document.getElementById("countdown").innerHTML =
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
 </body>
 </html>
 
