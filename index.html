@@ -104,6 +104,23 @@
     }, 500);
   });
 </script>
+<script>
+  const jokes = [
+    "Why don't eggs tell jokes? They'd crack each other up! 🥚😂",
+    "Why did the computer go to art school? Because it had a lot of bytes of creativity! 💻🎨",
+    "What did the science book say to the math book? Wow, you’ve got problems! 📚🤣",
+    "Why did the teddy bear say no to dessert? Because it was stuffed! 🧸🍰",
+    "What do you call a dinosaur with great manners? A please-and-thank-you-saurus! 🦕😊"
+  ];
+
+  function getRandomJoke() {
+    const randomIndex = Math.floor(Math.random() * jokes.length);
+    document.getElementById("joke").innerText = jokes[randomIndex];
+  }
+
+  // Show one joke when the page loads
+  getRandomJoke();
+</script>
 
 </body>
 </html>
