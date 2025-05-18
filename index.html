@@ -30,6 +30,15 @@
       font-size: 1.5em;
       padding: 20px;
       color: white;
+      transition: opacity 1s ease-in-out;
+    }
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1s ease-in forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     button {
       background: #ff69b4;
@@ -107,55 +116,43 @@
 
   <!-- Joke Logic -->
   <script>
-    let jokes = [];
+    const jokes = [
+      { question: "Why don't eggs tell jokes?", answer: "They'd crack each other up! 🥚😂" },
+      { question: "Why did the math book look sad?", answer: "It had too many problems! 📚😢" },
+      { question: "Why did the scarecrow win an award?", answer: "Because he was outstanding in his field! 🌾🏆" },
+      { question: "Why can’t Elsa have a balloon?", answer: "Because she’ll let it go! ❄️🎈" },
+      { question: "What kind of tree fits in your hand?", answer: "A palm tree! 🌴✋" },
+      { question: "How does the moon cut its hair?", answer: "Eclipse it! 🌕✂️" },
+      { question: "Why did the teddy bear say no to dessert?", answer: "Because it was stuffed! 🧸🍰" },
+      { question: "What do you call a pig that does karate?", answer: "A pork chop! 🐷🥋" },
+      { question: "Why did the cookie go to the doctor?", answer: "Because it felt crumby! 🍪😷" },
+      { question: "Why did the bicycle fall over?", answer: "Because it was two-tired! 🚲😴" }
+    ];
 
     function getRandomJoke() {
       const jokeBox = document.getElementById("joke");
       const randomIndex = Math.floor(Math.random() * jokes.length);
-      jokeBox.innerText = jokes[randomIndex];
+      const joke = jokes[randomIndex];
+
+      // Show question
+      jokeBox.innerHTML = `<strong>${joke.question}</strong>`;
+      jokeBox.classList.remove("fade-in");
+      void jokeBox.offsetWidth;
+      jokeBox.classList.add("fade-in");
+
+      // Then show answer after 10 seconds
+      setTimeout(() => {
+        jokeBox.innerHTML = `<strong>${joke.question}</strong><br><em>${joke.answer}</em>`;
+        jokeBox.classList.remove("fade-in");
+        void jokeBox.offsetWidth;
+        jokeBox.classList.add("fade-in");
+      }, 10000);
     }
 
+    // Start with a joke on page load
     window.onload = function () {
-      jokes = [
-        "Why don't eggs tell jokes? They'd crack each other up! 🥚😂",
-        "What did one wall say to the other wall? I'll meet you at the corner! 🧱😆",
-        "Why don’t skeletons fight each other? They don’t have the guts! ☠️🤣",
-        "What do you call cheese that isn’t yours? Nacho cheese! 🧀😂",
-        "Why did the teddy bear say no to dessert? Because it was stuffed! 🧸🍰",
-        "What do you get when you cross a vampire and a snowman? Frostbite! 🧛❄️",
-        "Why did the math book look sad? It had too many problems! 📚😢",
-        "Why can’t your nose be 12 inches long? Because then it would be a foot! 👃🦶",
-        "How do you make a tissue dance? Put a little boogie in it! 🤧🕺",
-        "Why was the computer cold? It left its Windows open! 💻❄️",
-        "What do you call a dinosaur with great manners? A please-and-thank-you-saurus! 🦕🙏",
-        "Why did the banana go to the doctor? Because it wasn’t peeling well! 🍌😷",
-        "Why don’t scientists trust atoms? Because they make up everything! ⚛️😂",
-        "What do you call a fish wearing a bowtie? Sofishticated! 🎣👔",
-        "Why did the cookie go to the doctor? Because it felt crumby! 🍪😷",
-        "Why did the scarecrow win an award? Because he was outstanding in his field! 🌾🏆",
-        "What do you call a cow that can play an instrument? A moo-sician! 🐄🎸",
-        "Why don't seagulls fly over the bay? Because then they'd be bagels! 🥯🕊️",
-        "Why did the golfer bring two pairs of pants? In case he got a hole in one! ⛳👖",
-        "What did one snowman say to the other? Do you smell carrots? ☃️🥕",
-        "Why was the broom late? It swept in! 🧹😴",
-        "How does a penguin build its house? Igloos it together! 🐧❄️",
-        "Why did the student eat his homework? Because the teacher said it was a piece of cake! 🎂📚",
-        "Why can’t Elsa have a balloon? Because she’ll let it go! ❄️🎈",
-        "What do you call a pig that does karate? A pork chop! 🐷🥋",
-        "Why are ghosts bad at lying? Because you can see right through them! 👻😆",
-        "Why did the mushroom go to the party? Because he was a fungi! 🍄🎉",
-        "Why did the bicycle fall over? Because it was two-tired! 🚲😴",
-        "What do elves use to take notes? Their elf-abet! 🧝📖",
-        "How do you throw a space party? You planet! 🪐🎊",
-        "What kind of tree fits in your hand? A palm tree! 🌴✋",
-        "Why did the fish blush? Because it saw the ocean’s bottom! 🐠🌊",
-        "How does the moon cut its hair? Eclipse it! 🌕✂️",
-        "Why did the lion eat the tightrope walker? He wanted a well-balanced meal! 🦁🎪",
-        "What did the grape do when it got stepped on? Nothing, it just let out a little wine! 🍇😜"
-      ];
-
       getRandomJoke();
-      setInterval(getRandomJoke, 20000); // Every 20 seconds
+      setInterval(getRandomJoke, 20000); // New joke every 20s
     };
   </script>
 </body>
