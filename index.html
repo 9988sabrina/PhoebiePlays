@@ -76,42 +76,18 @@
     function updateCountdown() {
       const now = new Date();
       const timeLeft = launchDate - now;
-
       if (timeLeft <= 0) {
         document.getElementById("countdown").innerHTML = "🚀 We Are Live!";
         return;
       }
-
       const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
       const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
       const seconds = Math.floor((timeLeft / 1000) % 60);
-
-      document.getElementById("countdown").innerHTML =
-        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
-
     setInterval(updateCountdown, 1000);
     updateCountdown();
-  </script>
-
-  <!-- Fairy Dust Sparkle Trail -->
-  <script>
-    const colors = ['#FFC0CB', '#FFD700', '#ADD8E6', '#FFFFFF', '#90EE90'];
-    document.addEventListener("mousemove", function(e) {
-      const sparkle = document.createElement("div");
-      sparkle.textContent = "✨";
-      sparkle.style.position = "absolute";
-      sparkle.style.left = e.pageX + "px";
-      sparkle.style.top = e.pageY + "px";
-      sparkle.style.pointerEvents = "none";
-      sparkle.style.fontSize = "18px";
-      sparkle.style.zIndex = 9999;
-      sparkle.style.color = colors[Math.floor(Math.random() * colors.length)];
-
-      document.body.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 500);
-    });
   </script>
 
   <!-- Joke Logic -->
@@ -122,32 +98,21 @@
       { question: "Why did the scarecrow win an award?", answer: "Because he was outstanding in his field! 🌾🏆" },
       { question: "Why can’t Elsa have a balloon?", answer: "Because she’ll let it go! ❄️🎈" },
       { question: "What kind of tree fits in your hand?", answer: "A palm tree! 🌴✋" },
-      { question: "How does the moon cut its hair?", answer: "Eclipse it! 🌕✂️" },
       { question: "Why did the teddy bear say no to dessert?", answer: "Because it was stuffed! 🧸🍰" },
-      { question: "What do you call a pig that does karate?", answer: "A pork chop! 🐷🥋" },
+      { question: "How does the moon cut its hair?", answer: "Eclipse it! 🌕✂️" },
       { question: "Why did the cookie go to the doctor?", answer: "Because it felt crumby! 🍪😷" },
-      { question: "Why did the bicycle fall over?", answer: "Because it was two-tired! 🚲😴" }
-      { question: "Why did the orange stop halfway up the hill?", answer: "It ran out of juice! 🍊🔋" },
-      { question: "Why was the math teacher late to school?", answer: "She took the wrong bus and ended up in Geometry! 📐🚌" },
-      { question: "Why did the cat sit on the computer?", answer: "To keep an eye on the mouse! 🐱🖱️" },
-      { question: "Why did the dragon sleep all day?", answer: "Because he was tired of flaming out! 🐉💤" },
-      { question: "Why did the pancake apply for a job?", answer: "It wanted to make some dough! 🥞💰" },
-      { question: "Why don't astronauts use social media?", answer: "They need more space! 🚀📱" },
-      { question: "Why did the crayons quit?", answer: "They were feeling drawn out! 🖍️😩" },
-      { question: "Why don’t clouds go to school?", answer: "They’d just drift through class! ☁️📚" },
-      { question: "Why did the spider join the web design team?", answer: "He was great at catching bugs! 🕸️💻" },
-      { question: "Why did the ghost go into the elevator?", answer: "To lift his spirits! 👻⬆️" },
-      { question: "Why did the duck get a time-out?", answer: "He was quacking too many jokes! 🦆🕒" },
-      { question: "Why did the magician cancel his show?", answer: "He couldn’t pull it together! 🎩🐇" },
+      { question: "What do you call a fish wearing a bowtie?", answer: "Sofishticated! 🎣👔" },
+      { question: "Why did the bicycle fall over?", answer: "Because it was two-tired! 🚲😴" },
       { question: "Why did the robot cross the road?", answer: "Because it was programmed to do so! 🤖🚶‍♂️" },
-      { question: "Why was the cupcake so good at school?", answer: "It always rose to the occasion! 🧁🎓" },
-      { question: "Why was the treasure chest so happy?", answer: "Because it was filled with joy! 💰😊" },
-      { question: "Why did the whale blush?", answer: "Because it saw the ocean’s bottom! 🐋😳" },
-      { question: "Why did the moon skip dinner?", answer: "Because it was full! 🌝🍽️" },
-      { question: "Why was the piano locked?", answer: "Because the keys were inside! 🎹🔐" },
+      { question: "Why did the pancake apply for a job?", answer: "It wanted to make some dough! 🥞💰" },
+      { question: "Why did the dragon sleep all day?", answer: "Because he was tired of flaming out! 🐉💤" },
+      { question: "Why did the crayons quit?", answer: "They were feeling drawn out! 🖍️😩" },
+      { question: "Why did the orange stop halfway up the hill?", answer: "It ran out of juice! 🍊🔋" },
+      { question: "Why did the cupcake do well in school?", answer: "It always rose to the occasion! 🧁🎓" },
+      { question: "Why did the ghost go into the elevator?", answer: "To lift his spirits! 👻⬆️" },
       { question: "Why did the jellybean go to school?", answer: "It wanted to be a Smartie! 🍬🧠" },
-      { question: "Why did the chicken sit on the egg?", answer: "Because it didn’t want to crack up! 🐣😂" }
-
+      { question: "Why did the chicken sit on the egg?", answer: "Because it didn’t want to crack up! 🐣😂" },
+      { question: "Why was the piano locked?", answer: "Because the keys were inside! 🎹🔐" }
     ];
 
     function getRandomJoke() {
@@ -161,7 +126,7 @@
       void jokeBox.offsetWidth;
       jokeBox.classList.add("fade-in");
 
-      // Then show answer after 10 seconds
+      // Show answer after 10 seconds
       setTimeout(() => {
         jokeBox.innerHTML = `<strong>${joke.question}</strong><br><em>${joke.answer}</em>`;
         jokeBox.classList.remove("fade-in");
@@ -170,10 +135,9 @@
       }, 10000);
     }
 
-    // Start with a joke on page load
     window.onload = function () {
       getRandomJoke();
-      setInterval(getRandomJoke, 20000); // New joke every 20s
+      setInterval(getRandomJoke, 20000);
     };
   </script>
 </body>
