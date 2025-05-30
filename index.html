@@ -2,45 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PhoebiePlays Launch Countdown</title>
+  <title>PhoebiePlays: Find the Laughing Emoji!</title>
   <style>
     body {
       background: linear-gradient(to right, #f6d365, #fda085);
       color: white;
       font-family: 'Comic Sans MS', cursive, sans-serif;
       text-align: center;
-      padding-top: 80px;
       margin: 0;
-      height: auto;
-      overflow-x: hidden;
+      padding: 20px;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
     }
     h1 {
-      font-size: 3em;
-      text-shadow: 2px 2px 8px #000;
+      font-size: 2.5em;
     }
-    p {
-      font-size: 1.5em;
-      text-shadow: 1px 1px 5px #000;
-    }
-    #countdown {
+    #emoji {
       font-size: 2em;
-      margin: 20px 0;
+      position: absolute;
+      cursor: pointer;
+      display: none;
     }
-    #joke {
-      font-size: 1.5em;
-      padding: 20px;
-      color: white;
-      transition: opacity 1s ease-in-out;
-    }
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 1s ease-in forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    button {
+    #startBtn, #restartBtn {
       background: #ff69b4;
       border: none;
       border-radius: 12px;
@@ -48,141 +32,71 @@
       font-size: 1.2em;
       padding: 10px 25px;
       cursor: pointer;
-      box-shadow: 2px 2px 8px #000;
-      transition: all 0.3s ease;
       margin: 10px;
+      box-shadow: 2px 2px 8px #000;
     }
-    button:hover {
+    #startBtn:hover, #restartBtn:hover {
       background: #ff1493;
       transform: scale(1.1);
     }
-    form {
-      margin-top: 40px;
-    }
-    input, textarea {
-      padding: 10px;
-      font-size: 1em;
-      border-radius: 8px;
-      border: none;
-      margin: 5px;
-      width: 300px;
-    }
-    #laugh-count {
+    #message, #scoreboard {
       font-size: 1.2em;
       margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>🎉 Phoebie’s Magical World is Coming!</h1>
-  <p>🌟 Countdown to Launch Day 🌟</p>
-  <div id="countdown">Loading...</div>
-
-  <div id="joke">Loading a funny joke...</div>
-  <button onclick="getRandomJoke(); addLaugh();">🤣 Tell Me Another Joke!</button>
-
-  <div id="laugh-count">💖 Laugh Count: <span id="laughs">0</span></div>
-
-  <a href="surprise.html">
-    <button>🎁 Click here for a surprise!</button>
-  </a>
-
-  <form onsubmit="submitJoke(); return false;">
-    <h2>💬 Submit Your Own Joke!</h2>
-    <input type="text" id="userQuestion" placeholder="Your joke question" required><br>
-    <input type="text" id="userAnswer" placeholder="Your joke answer" required><br>
-    <button type="submit">Submit Joke</button>
-  </form>
+  <h1>🎯 Find the Laughing Emoji! 😆</h1>
+  <p>Click the emoji as fast as you can!</p>
+  <button id="startBtn" onclick="startGame()">Start Game</button>
+  <div id="emoji">😆</div>
+  <div id="message"></div>
+  <div id="scoreboard">💖 Total Laughs: <span id="total">0</span> | ⏱️ Best Time: <span id="best">--</span> seconds</div>
+  <button id="restartBtn" onclick="startGame()" style="display:none">Play Again 🔁</button>
 
   <script>
-    const launchDate = new Date("2025-05-15T08:00:00");
-    function updateCountdown() {
-      const now = new Date();
-      const timeLeft = launchDate - now;
-      if (timeLeft <= 0) {
-        document.getElementById("countdown").innerHTML = "🚀 We Are Live!";
-        return;
+    const emoji = document.getElementById('emoji');
+    const message = document.getElementById('message');
+    const totalSpan = document.getElementById('total');
+    const bestSpan = document.getElementById('best');
+    const restartBtn = document.getElementById('restartBtn');
+
+    let totalLaughs = 0;
+    let bestTime = null;
+    let startTime;
+
+    function startGame() {
+      message.innerText = "";
+      emoji.style.display = "block";
+      restartBtn.style.display = "none";
+      moveEmoji();
+      startTime = Date.now();
+    }
+
+    function moveEmoji() {
+      const x = Math.random() * (window.innerWidth - 60);
+      const y = Math.random() * (window.innerHeight - 60);
+      emoji.style.left = `${x}px`;
+      emoji.style.top = `${y}px`;
+    }
+
+    emoji.onclick = () => {
+      const endTime = Date.now();
+      const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+
+      totalLaughs++;
+      if (!bestTime || timeTaken < bestTime) {
+        bestTime = timeTaken;
       }
-      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
-      const seconds = Math.floor((timeLeft / 1000) % 60);
-      document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
 
-    const jokes = [
-  { question: "Why don't eggs tell jokes?", answer: "They'd crack each other up! 🥚😂" },
-  { question: "Why did the math book look sad?", answer: "It had too many problems! 📚😢" },
-  { question: "Why did the scarecrow win an award?", answer: "Because he was outstanding in his field! 🌾🏆" },
-  { question: "Why can’t Elsa have a balloon?", answer: "Because she’ll let it go! ❄️🎈" },
-  { question: "What kind of tree fits in your hand?", answer: "A palm tree! 🌴✋" },
-  { question: "Why did the teddy bear say no to dessert?", answer: "Because it was stuffed! 🧸🍰" },
-  { question: "How does the moon cut its hair?", answer: "Eclipse it! 🌕✂️" },
-  { question: "Why did the cookie go to the doctor?", answer: "Because it felt crumby! 🍪😷" },
-  { question: "What do you call a fish wearing a bowtie?", answer: "Sofishticated! 🎣👔" },
-  { question: "Why did the bicycle fall over?", answer: "Because it was two-tired! 🚲😴" },
-  { question: "Why did the robot cross the road?", answer: "Because it was programmed to do so! 🤖🚶‍♂️" },
-  { question: "Why did the pancake apply for a job?", answer: "It wanted to make some dough! 🥞💰" },
-  { question: "Why did the dragon sleep all day?", answer: "Because he was tired of flaming out! 🐉💤" },
-  { question: "Why did the crayons quit?", answer: "They were feeling drawn out! 🖍️😩" },
-  { question: "Why did the orange stop halfway up the hill?", answer: "It ran out of juice! 🍊🔋" },
-  { question: "Why did the cupcake do well in school?", answer: "It always rose to the occasion! 🧁🎓" },
-  { question: "Why did the ghost go into the elevator?", answer: "To lift his spirits! 👻⬆️" },
-  { question: "Why did the jellybean go to school?", answer: "It wanted to be a Smartie! 🍬🧠" },
-  { question: "Why did the chicken sit on the egg?", answer: "Because it didn’t want to crack up! 🐣😂" },
-  { question: "Why was the piano locked?", answer: "Because the keys were inside! 🎹🔐" },
-  { question: "Why was the broom late?", answer: "It swept in! 🧹😴" },
-  { question: "How does a penguin build its house?", answer: "Igloos it together! 🐧❄️" },
-  { question: "Why did the student eat his homework?", answer: "Because the teacher said it was a piece of cake! 🎂📚" },
-  { question: "Why can’t your nose be 12 inches long?", answer: "Because then it would be a foot! 👃🦶" },
-  { question: "Why did the banana go to the doctor?", answer: "Because it wasn’t peeling well! 🍌😷" },
-  { question: "Why don’t scientists trust atoms?", answer: "Because they make up everything! ⚛️😂" },
-  { question: "What do you call a bear with no teeth?", answer: "A gummy bear! 🐻🍬" },
-  { question: "Why did the fish blush?", answer: "Because it saw the ocean’s bottom! 🐠🌊" },
-  { question: "Why did the lion eat the tightrope walker?", answer: "He wanted a well-balanced meal! 🦁🎪" },
-  { question: "What did the grape do when it got stepped on?", answer: "Nothing, it just let out a little wine! 🍇😜" }
-];
+      message.innerHTML = `🎉 You found it in <strong>${timeTaken}</strong> seconds!`;
+      totalSpan.textContent = totalLaughs;
+      bestSpan.textContent = bestTime;
 
-    let laughCount = 0;
-
-    function getRandomJoke() {
-      const jokeBox = document.getElementById("joke");
-      const randomIndex = Math.floor(Math.random() * jokes.length);
-      const joke = jokes[randomIndex];
-      jokeBox.innerHTML = `<strong>${joke.question}</strong>`;
-      jokeBox.classList.remove("fade-in");
-      void jokeBox.offsetWidth;
-      jokeBox.classList.add("fade-in");
-      setTimeout(() => {
-        jokeBox.innerHTML = `<strong>${joke.question}</strong><br><em>${joke.answer}</em>`;
-        jokeBox.classList.remove("fade-in");
-        void jokeBox.offsetWidth;
-        jokeBox.classList.add("fade-in");
-      }, 10000);
-    }
-
-    function submitJoke() {
-      const q = document.getElementById("userQuestion").value.trim();
-      const a = document.getElementById("userAnswer").value.trim();
-      if (q && a) {
-        jokes.push({ question: q, answer: a });
-        alert("🎉 Your joke was added! Click the button to see it.");
-        document.getElementById("userQuestion").value = '';
-        document.getElementById("userAnswer").value = '';
-      }
-    }
-
-    function addLaugh() {
-      laughCount++;
-      document.getElementById("laughs").textContent = laughCount;
-    }
-
-    window.onload = function () {
-      getRandomJoke();
-      setInterval(getRandomJoke, 20000);
+      emoji.style.display = "none";
+      restartBtn.style.display = "inline-block";
     };
   </script>
 </body>
 </html>
+
