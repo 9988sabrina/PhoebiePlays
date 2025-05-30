@@ -23,6 +23,7 @@
       position: absolute;
       cursor: pointer;
       display: none;
+      transition: all 0.3s ease-in-out;
     }
     #startBtn, #restartBtn {
       background: #ff69b4;
@@ -43,12 +44,17 @@
       font-size: 1.2em;
       margin-top: 20px;
     }
+    #timer {
+      font-size: 1.5em;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>🎯 Find the Laughing Emoji! 😆</h1>
-  <p>Click the emoji as fast as you can!</p>
+  <p>Click the emoji before time runs out!</p>
   <button id="startBtn" onclick="startGame()">Start Game</button>
+  <div id="timer">⏳ Time Left: <span id="timeLeft">5</span> seconds</div>
   <div id="emoji">😆</div>
   <div id="message"></div>
   <div id="scoreboard">💖 Total Laughs: <span id="total">0</span> | ⏱️ Best Time: <span id="best">--</span> seconds</div>
@@ -60,10 +66,13 @@
     const totalSpan = document.getElementById('total');
     const bestSpan = document.getElementById('best');
     const restartBtn = document.getElementById('restartBtn');
+    const timeLeftDisplay = document.getElementById('timeLeft');
 
     let totalLaughs = 0;
     let bestTime = null;
     let startTime;
+    let timer;
+    let gameTime = 5; // seconds to find emoji
 
     function startGame() {
       message.innerText = "";
@@ -71,6 +80,8 @@
       restartBtn.style.display = "none";
       moveEmoji();
       startTime = Date.now();
+      timeLeftDisplay.innerText = gameTime;
+      countdown(gameTime);
     }
 
     function moveEmoji() {
@@ -78,6 +89,20 @@
       const y = Math.random() * (window.innerHeight - 60);
       emoji.style.left = `${x}px`;
       emoji.style.top = `${y}px`;
+    }
+
+    function countdown(seconds) {
+      let timeLeft = seconds;
+      timer = setInterval(() => {
+        timeLeft--;
+        timeLeftDisplay.innerText = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          emoji.style.display = "none";
+          message.innerHTML = "⏰ Time’s up! Try again!";
+          restartBtn.style.display = "inline-block";
+        }
+      }, 1000);
     }
 
     emoji.onclick = () => {
@@ -93,6 +118,7 @@
       totalSpan.textContent = totalLaughs;
       bestSpan.textContent = bestTime;
 
+      clearInterval(timer);
       emoji.style.display = "none";
       restartBtn.style.display = "inline-block";
     };
