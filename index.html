@@ -22,7 +22,7 @@
       font-size: 3em;
       position: absolute;
       cursor: pointer;
-      transition: all 0.8s ease-in-out;
+      transition: all 0.3s ease-in-out;
     }
     #startBtn, #restartBtn {
       background: #ff69b4;
@@ -47,6 +47,13 @@
       font-size: 1.5em;
       margin-top: 10px;
     }
+    #jokeBox {
+      margin-top: 40px;
+      font-size: 1.3em;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
   </style>
 </head>
 <body>
@@ -58,6 +65,8 @@
   <div id="scoreboard">💖 Total Laughs: <span id="total">0</span> | ⏱️ Best Time: <span id="best">--</span> seconds</div>
   <button id="restartBtn" onclick="startGame()" style="display:none">Play Again 🔁</button>
 
+  <div id="jokeBox">Loading a joke...</div>
+
   <script>
     const body = document.body;
     const message = document.getElementById('message');
@@ -65,6 +74,7 @@
     const bestSpan = document.getElementById('best');
     const restartBtn = document.getElementById('restartBtn');
     const timeLeftDisplay = document.getElementById('timeLeft');
+    const jokeBox = document.getElementById('jokeBox');
 
     let totalLaughs = 0;
     let bestTime = null;
@@ -74,6 +84,28 @@
     let emojiSize = 60;
     let level = 1;
     let intervalMover;
+
+    const jokes = [
+      { question: "Why don't eggs tell jokes?", answer: "They'd crack each other up! 🥚😂" },
+      { question: "Why did the math book look sad?", answer: "It had too many problems! 📚😢" },
+      { question: "Why did the scarecrow win an award?", answer: "Because he was outstanding in his field! 🌾🏆" },
+      { question: "Why can’t Elsa have a balloon?", answer: "Because she’ll let it go! ❄️🎈" },
+      { question: "What kind of tree fits in your hand?", answer: "A palm tree! 🌴✋" },
+      { question: "Why did the teddy bear say no to dessert?", answer: "Because it was stuffed! 🧸🍰" },
+      { question: "How does the moon cut its hair?", answer: "Eclipse it! 🌕✂️" },
+      { question: "Why did the cookie go to the doctor?", answer: "Because it felt crumby! 🍪😷" },
+      { question: "What do you call a fish wearing a bowtie?", answer: "Sofishticated! 🎣👔" },
+      { question: "Why did the bicycle fall over?", answer: "Because it was two-tired! 🚲😴" }
+    ];
+
+    function showRandomJoke() {
+      const randomIndex = Math.floor(Math.random() * jokes.length);
+      const joke = jokes[randomIndex];
+      jokeBox.innerHTML = `<strong>${joke.question}</strong>`;
+      setTimeout(() => {
+        jokeBox.innerHTML += `<br><em>${joke.answer}</em>`;
+      }, 5000);
+    }
 
     function createEmoji(char, isReal = false) {
       const el = document.createElement("div");
@@ -97,8 +129,9 @@
           clearInterval(intervalMover);
           removeAllEmojis();
           restartBtn.style.display = "inline-block";
-          gameTime = Math.max(2, gameTime - 0.8);
+          gameTime = Math.max(2, gameTime - 0.5);
           emojiSize = Math.max(20, emojiSize - 5);
+          showRandomJoke();
         };
       } else {
         el.onclick = () => {
@@ -107,6 +140,7 @@
           clearInterval(intervalMover);
           removeAllEmojis();
           restartBtn.style.display = "inline-block";
+          showRandomJoke();
         };
       }
     }
@@ -125,9 +159,10 @@
     function startGame() {
       message.innerText = "";
       restartBtn.style.display = "none";
-      emojiSize = emojiSize; // keep current size
+      emojiSize = emojiSize;
       timeLeftDisplay.innerText = gameTime;
       removeAllEmojis();
+      jokeBox.innerHTML = "";
 
       createEmoji("😆", true);
       createEmoji("😝");
@@ -148,6 +183,7 @@
           message.innerHTML = "⏰ Time’s up! Try again!";
           removeAllEmojis();
           restartBtn.style.display = "inline-block";
+          showRandomJoke();
         }
       }, 1000);
     }
