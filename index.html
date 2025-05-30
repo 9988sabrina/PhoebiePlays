@@ -22,7 +22,7 @@
       font-size: 3em;
       position: absolute;
       cursor: pointer;
-      transition: all 0.3s ease-in-out;
+      transition: all 0.8s ease-in-out;
     }
     #startBtn, #restartBtn {
       background: #ff69b4;
@@ -97,7 +97,7 @@
           clearInterval(intervalMover);
           removeAllEmojis();
           restartBtn.style.display = "inline-block";
-          gameTime = Math.max(2, gameTime - 0.5);
+          gameTime = Math.max(2, gameTime - 0.8);
           emojiSize = Math.max(20, emojiSize - 5);
         };
       } else {
