@@ -2,53 +2,231 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🎁 Surprise from Phoebie!</title>
+  <title>PhoebiePlays: Find the Laughing Emoji!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #b3e5fc;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom, #a18cd1 0%, #fbc2eb 100%);
+      color: white;
+      font-family: 'Fredoka One', cursive;
       text-align: center;
-      padding: 50px;
-      color: #333;
+      margin: 0;
+      padding: 20px;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
     }
     h1 {
+      font-size: 2.5em;
+      background: linear-gradient(90deg, #ff8a00, #e52e71, #9b00e8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: moveBg 4s linear infinite;
+    }
+    @keyframes moveBg {
+      from { background-position: 0% }
+      to { background-position: 200% }
+    }
+    .emoji {
       font-size: 3em;
-      color: #ff69b4;
-      text-shadow: 2px 2px #fff;
+      position: absolute;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
     }
-    p {
-      font-size: 1.5em;
-      margin: 20px;
-    }
-    img {
-      max-width: 300px;
-      border-radius: 20px;
-      box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-    }
-    a {
-      display: inline-block;
-      margin-top: 30px;
-      padding: 12px 24px;
-      background-color: #ff69b4;
-      color: white;
-      text-decoration: none;
-      font-size: 1.2em;
+    #startBtn, #restartBtn, #surpriseBtn, #addJokeBtn {
+      background: #ff69b4;
+      border: none;
       border-radius: 12px;
+      color: white;
+      font-size: 1.2em;
+      padding: 10px 25px;
+      cursor: pointer;
+      margin: 10px;
+      box-shadow: 2px 2px 8px #000;
     }
-    a:hover {
-      background-color: #ff1493;
+    #startBtn:hover, #restartBtn:hover, #surpriseBtn:hover, #addJokeBtn:hover {
+      background: #ff1493;
+      transform: scale(1.1);
+    }
+    #message, #scoreboard {
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+    #timer {
+      font-size: 1.5em;
+      margin-top: 10px;
+    }
+    #jokeBox {
+      margin-top: 40px;
+      font-size: 1.3em;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <h1>🎁 Surprise!</h1>
-  <p>You're amazing and creative — just like a shooting star! 🌠</p>
+  <h1>🎯 Find the Real Laughing Emoji! 😆</h1>
+  <p>Click the real 😆 before time runs out! Watch out for tricky fakes!</p>
+  <button id="startBtn" onclick="startGame()">Start Game</button>
+  <button id="surpriseBtn" onclick="location.href='surprise.html'">🎁 Click here for a surprise!</button>
+  <button id="addJokeBtn" onclick="addNewJoke()">➕ Add a Joke</button>
+  <div id="timer">⏳ Time Left: <span id="timeLeft">10</span> seconds</div>
+  <div id="message"></div>
+  <div id="scoreboard">💖 Total Laughs: <span id="total">0</span> | ⏱️ Best Time: <span id="best">--</span> seconds</div>
+  <button id="restartBtn" onclick="startGame()" style="display:none">Play Again 🔁</button>
 
- <img src="shooting-star.png" alt="Magical shooting star by Phoebie">
+  <div id="jokeBox">Loading a joke...</div>
 
+  <script>
+    document.addEventListener('mousemove', function(e) {
+      const sparkle = document.createElement('div');
+      sparkle.textContent = '✨';
+      sparkle.style.position = 'absolute';
+      sparkle.style.left = e.pageX + 'px';
+      sparkle.style.top = e.pageY + 'px';
+      sparkle.style.fontSize = '14px';
+      sparkle.style.pointerEvents = 'none';
+      sparkle.style.zIndex = '9999';
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 300);
+    });
+  
+    function startGame() {
+      alert('🎮 The game has started! (Insert your game logic here.)');
+    }
 
-  <p>Keep shining and building magical things every day! 🌈🪄</p>
+    function addNewJoke() {
+      const question = prompt("What's your joke question?");
+      const answer = prompt("What's the punchline?");
+      if (question && answer) {
+        alert("Joke added! It might appear in the next round. 😄
 
-  <a href="index.html">← Back to Home</a>
+" + question + "
+" + answer);
+      }
+    }
+  </script>
+<script>
+let totalLaughs = 0;
+let bestTime = null;
+let startTime;
+let timer;
+let gameTime = 10;
+let emojiSize = 60;
+let intervalMover;
+
+const message = document.getElementById('message');
+const totalSpan = document.getElementById('total');
+const bestSpan = document.getElementById('best');
+const timeLeftDisplay = document.getElementById('timeLeft');
+const jokeBox = document.getElementById('jokeBox');
+const restartBtn = document.getElementById('restartBtn');
+const body = document.body;
+
+const jokes = [
+  { question: "Why don't eggs tell jokes?", answer: "They'd crack each other up! 🥚😂" },
+  { question: "Why did the math book look sad?", answer: "It had too many problems! 📚😢" }
+];
+
+function showRandomJoke() {
+  const randomIndex = Math.floor(Math.random() * jokes.length);
+  const joke = jokes[randomIndex];
+  jokeBox.innerHTML = `<strong>${joke.question}</strong>`;
+  setTimeout(() => {
+    jokeBox.innerHTML += `<br><em>${joke.answer}</em>`;
+  }, 5000);
+}
+
+function addNewJoke() {
+  const question = prompt("What's your joke question?");
+  const answer = prompt("What's the punchline?");
+  if (question && answer) {
+    jokes.push({ question, answer });
+    alert("Your joke was added! It might appear next time. 🎉");
+  }
+}
+
+function removeAllEmojis() {
+  document.querySelectorAll(".emoji").forEach(e => e.remove());
+}
+
+function moveEmoji(el) {
+  const x = Math.random() * (window.innerWidth - emojiSize);
+  const y = Math.random() * (window.innerHeight - emojiSize);
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+}
+
+function createEmoji(char, isReal = false) {
+  const el = document.createElement("div");
+  el.classList.add("emoji");
+  el.innerText = char;
+  el.style.fontSize = emojiSize + "px";
+  moveEmoji(el);
+  body.appendChild(el);
+
+  if (isReal) {
+    el.id = "realEmoji";
+    el.onclick = () => {
+      const endTime = Date.now();
+      const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+      totalLaughs++;
+      if (!bestTime || timeTaken < bestTime) bestTime = timeTaken;
+      message.innerHTML = `🎉 You found it in <strong>${timeTaken}</strong> seconds!`;
+      totalSpan.textContent = totalLaughs;
+      bestSpan.textContent = bestTime;
+      clearInterval(timer);
+      clearInterval(intervalMover);
+      removeAllEmojis();
+      restartBtn.style.display = "inline-block";
+      gameTime = Math.max(2, gameTime - 0.5);
+      emojiSize = Math.max(20, emojiSize - 5);
+      showRandomJoke();
+    };
+  } else {
+    el.onclick = () => {
+      message.innerHTML = "😜 Oops! Wrong one! Try again.";
+      clearInterval(timer);
+      clearInterval(intervalMover);
+      removeAllEmojis();
+      restartBtn.style.display = "inline-block";
+      showRandomJoke();
+    };
+  }
+}
+
+function startGame() {
+  message.innerText = "";
+  restartBtn.style.display = "none";
+  emojiSize = emojiSize;
+  timeLeftDisplay.innerText = gameTime;
+  removeAllEmojis();
+  jokeBox.innerHTML = "";
+
+  createEmoji("😆", true);
+  createEmoji("😝");
+  createEmoji("🤪");
+
+  intervalMover = setInterval(() => {
+    document.querySelectorAll(".emoji").forEach(e => moveEmoji(e));
+  }, 800);
+
+  startTime = Date.now();
+  let timeLeft = gameTime;
+  timer = setInterval(() => {
+    timeLeft--;
+    timeLeftDisplay.innerText = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      clearInterval(intervalMover);
+      message.innerHTML = "⏰ Time’s up! Try again!";
+      removeAllEmojis();
+      restartBtn.style.display = "inline-block";
+      showRandomJoke();
+    }
+  }, 1000);
+}
+</script>
 </body>
 </html>
