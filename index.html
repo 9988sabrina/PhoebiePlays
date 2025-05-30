@@ -67,6 +67,10 @@
       margin: 5px;
       width: 300px;
     }
+    #laugh-count {
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -75,7 +79,9 @@
   <div id="countdown">Loading...</div>
 
   <div id="joke">Loading a funny joke...</div>
-  <button onclick="getRandomJoke()">🤣 Tell Me Another Joke!</button>
+  <button onclick="getRandomJoke(); addLaugh();">🤣 Tell Me Another Joke!</button>
+
+  <div id="laugh-count">💖 Laugh Count: <span id="laughs">0</span></div>
 
   <a href="surprise.html">
     <button>🎁 Click here for a surprise!</button>
@@ -107,12 +113,39 @@
     updateCountdown();
 
     const jokes = [
-      { question: "Why don't eggs tell jokes?", answer: "They'd crack each other up! 🥚😂" },
-      { question: "Why did the math book look sad?", answer: "It had too many problems! 📚😢" },
-      { question: "Why did the scarecrow win an award?", answer: "Because he was outstanding in his field! 🌾🏆" },
-      { question: "Why can’t Elsa have a balloon?", answer: "Because she’ll let it go! ❄️🎈" },
-      { question: "What kind of tree fits in your hand?", answer: "A palm tree! 🌴✋" }
-    ];
+  { question: "Why don't eggs tell jokes?", answer: "They'd crack each other up! 🥚😂" },
+  { question: "Why did the math book look sad?", answer: "It had too many problems! 📚😢" },
+  { question: "Why did the scarecrow win an award?", answer: "Because he was outstanding in his field! 🌾🏆" },
+  { question: "Why can’t Elsa have a balloon?", answer: "Because she’ll let it go! ❄️🎈" },
+  { question: "What kind of tree fits in your hand?", answer: "A palm tree! 🌴✋" },
+  { question: "Why did the teddy bear say no to dessert?", answer: "Because it was stuffed! 🧸🍰" },
+  { question: "How does the moon cut its hair?", answer: "Eclipse it! 🌕✂️" },
+  { question: "Why did the cookie go to the doctor?", answer: "Because it felt crumby! 🍪😷" },
+  { question: "What do you call a fish wearing a bowtie?", answer: "Sofishticated! 🎣👔" },
+  { question: "Why did the bicycle fall over?", answer: "Because it was two-tired! 🚲😴" },
+  { question: "Why did the robot cross the road?", answer: "Because it was programmed to do so! 🤖🚶‍♂️" },
+  { question: "Why did the pancake apply for a job?", answer: "It wanted to make some dough! 🥞💰" },
+  { question: "Why did the dragon sleep all day?", answer: "Because he was tired of flaming out! 🐉💤" },
+  { question: "Why did the crayons quit?", answer: "They were feeling drawn out! 🖍️😩" },
+  { question: "Why did the orange stop halfway up the hill?", answer: "It ran out of juice! 🍊🔋" },
+  { question: "Why did the cupcake do well in school?", answer: "It always rose to the occasion! 🧁🎓" },
+  { question: "Why did the ghost go into the elevator?", answer: "To lift his spirits! 👻⬆️" },
+  { question: "Why did the jellybean go to school?", answer: "It wanted to be a Smartie! 🍬🧠" },
+  { question: "Why did the chicken sit on the egg?", answer: "Because it didn’t want to crack up! 🐣😂" },
+  { question: "Why was the piano locked?", answer: "Because the keys were inside! 🎹🔐" },
+  { question: "Why was the broom late?", answer: "It swept in! 🧹😴" },
+  { question: "How does a penguin build its house?", answer: "Igloos it together! 🐧❄️" },
+  { question: "Why did the student eat his homework?", answer: "Because the teacher said it was a piece of cake! 🎂📚" },
+  { question: "Why can’t your nose be 12 inches long?", answer: "Because then it would be a foot! 👃🦶" },
+  { question: "Why did the banana go to the doctor?", answer: "Because it wasn’t peeling well! 🍌😷" },
+  { question: "Why don’t scientists trust atoms?", answer: "Because they make up everything! ⚛️😂" },
+  { question: "What do you call a bear with no teeth?", answer: "A gummy bear! 🐻🍬" },
+  { question: "Why did the fish blush?", answer: "Because it saw the ocean’s bottom! 🐠🌊" },
+  { question: "Why did the lion eat the tightrope walker?", answer: "He wanted a well-balanced meal! 🦁🎪" },
+  { question: "What did the grape do when it got stepped on?", answer: "Nothing, it just let out a little wine! 🍇😜" }
+];
+
+    let laughCount = 0;
 
     function getRandomJoke() {
       const jokeBox = document.getElementById("joke");
@@ -139,6 +172,11 @@
         document.getElementById("userQuestion").value = '';
         document.getElementById("userAnswer").value = '';
       }
+    }
+
+    function addLaugh() {
+      laughCount++;
+      document.getElementById("laughs").textContent = laughCount;
     }
 
     window.onload = function () {
