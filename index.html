@@ -91,6 +91,21 @@
       document.body.appendChild(sparkle);
       setTimeout(() => sparkle.remove(), 300);
     });
+  
+    function startGame() {
+      alert('🎮 The game has started! (Insert your game logic here.)');
+    }
+
+    function addNewJoke() {
+      const question = prompt("What's your joke question?");
+      const answer = prompt("What's the punchline?");
+      if (question && answer) {
+        alert("Joke added! It might appear in the next round. 😄
+
+" + question + "
+" + answer);
+      }
+    }
   </script>
 </body>
 </html>
