@@ -60,7 +60,7 @@
   <h1>🎯 Find the Real Laughing Emoji! 😆</h1>
   <p>Click the real 😆 before time runs out! Watch out for tricky fakes!</p>
   <button id="startBtn" onclick="startGame()">Start Game</button>
-  <div id="timer">⏳ Time Left: <span id="timeLeft">5</span> seconds</div>
+  <div id="timer">⏳ Time Left: <span id="timeLeft">9</span> seconds</div>
   <div id="message"></div>
   <div id="scoreboard">💖 Total Laughs: <span id="total">0</span> | ⏱️ Best Time: <span id="best">--</span> seconds</div>
   <button id="restartBtn" onclick="startGame()" style="display:none">Play Again 🔁</button>
@@ -149,7 +149,7 @@
           clearInterval(intervalMover);
           removeAllEmojis();
           restartBtn.style.display = "inline-block";
-          gameTime = Math.max(2, gameTime - 0.5);
+          gameTime = Math.max(2, gameTime - 0.9);
           emojiSize = Math.max(20, emojiSize - 5);
           showRandomJoke();
         };
