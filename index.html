@@ -18,11 +18,10 @@
     h1 {
       font-size: 2.5em;
     }
-    #emoji {
-      font-size: 2em;
+    .emoji {
+      font-size: 3em;
       position: absolute;
       cursor: pointer;
-      display: none;
       transition: all 0.3s ease-in-out;
     }
     #startBtn, #restartBtn {
@@ -51,17 +50,16 @@
   </style>
 </head>
 <body>
-  <h1>🎯 Find the Laughing Emoji! 😆</h1>
-  <p>Click the emoji before time runs out!</p>
+  <h1>🎯 Find the Real Laughing Emoji! 😆</h1>
+  <p>Click the real 😆 before time runs out! Watch out for tricky fakes!</p>
   <button id="startBtn" onclick="startGame()">Start Game</button>
   <div id="timer">⏳ Time Left: <span id="timeLeft">5</span> seconds</div>
-  <div id="emoji">😆</div>
   <div id="message"></div>
   <div id="scoreboard">💖 Total Laughs: <span id="total">0</span> | ⏱️ Best Time: <span id="best">--</span> seconds</div>
   <button id="restartBtn" onclick="startGame()" style="display:none">Play Again 🔁</button>
 
   <script>
-    const emoji = document.getElementById('emoji');
+    const body = document.body;
     const message = document.getElementById('message');
     const totalSpan = document.getElementById('total');
     const bestSpan = document.getElementById('best');
@@ -72,57 +70,87 @@
     let bestTime = null;
     let startTime;
     let timer;
-    let gameTime = 5; // seconds to find emoji
+    let gameTime = 5;
+    let emojiSize = 60;
+    let level = 1;
+    let intervalMover;
+
+    function createEmoji(char, isReal = false) {
+      const el = document.createElement("div");
+      el.classList.add("emoji");
+      el.innerText = char;
+      el.style.fontSize = emojiSize + "px";
+      moveEmoji(el);
+      body.appendChild(el);
+
+      if (isReal) {
+        el.id = "realEmoji";
+        el.onclick = () => {
+          const endTime = Date.now();
+          const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+          totalLaughs++;
+          if (!bestTime || timeTaken < bestTime) bestTime = timeTaken;
+          message.innerHTML = `🎉 You found it in <strong>${timeTaken}</strong> seconds!`;
+          totalSpan.textContent = totalLaughs;
+          bestSpan.textContent = bestTime;
+          clearInterval(timer);
+          clearInterval(intervalMover);
+          removeAllEmojis();
+          restartBtn.style.display = "inline-block";
+          gameTime = Math.max(2, gameTime - 0.5);
+          emojiSize = Math.max(20, emojiSize - 5);
+        };
+      } else {
+        el.onclick = () => {
+          message.innerHTML = "😜 Oops! Wrong one! Try again.";
+          clearInterval(timer);
+          clearInterval(intervalMover);
+          removeAllEmojis();
+          restartBtn.style.display = "inline-block";
+        };
+      }
+    }
+
+    function removeAllEmojis() {
+      document.querySelectorAll(".emoji").forEach(e => e.remove());
+    }
+
+    function moveEmoji(el) {
+      const x = Math.random() * (window.innerWidth - emojiSize);
+      const y = Math.random() * (window.innerHeight - emojiSize);
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+    }
 
     function startGame() {
       message.innerText = "";
-      emoji.style.display = "block";
       restartBtn.style.display = "none";
-      moveEmoji();
-      startTime = Date.now();
+      emojiSize = emojiSize; // keep current size
       timeLeftDisplay.innerText = gameTime;
-      countdown(gameTime);
-    }
+      removeAllEmojis();
 
-    function moveEmoji() {
-      const x = Math.random() * (window.innerWidth - 60);
-      const y = Math.random() * (window.innerHeight - 60);
-      emoji.style.left = `${x}px`;
-      emoji.style.top = `${y}px`;
-    }
+      createEmoji("😆", true);
+      createEmoji("😝");
+      createEmoji("🤪");
 
-    function countdown(seconds) {
-      let timeLeft = seconds;
+      intervalMover = setInterval(() => {
+        document.querySelectorAll(".emoji").forEach(e => moveEmoji(e));
+      }, 800);
+
+      startTime = Date.now();
+      let timeLeft = gameTime;
       timer = setInterval(() => {
         timeLeft--;
         timeLeftDisplay.innerText = timeLeft;
         if (timeLeft <= 0) {
           clearInterval(timer);
-          emoji.style.display = "none";
+          clearInterval(intervalMover);
           message.innerHTML = "⏰ Time’s up! Try again!";
+          removeAllEmojis();
           restartBtn.style.display = "inline-block";
         }
       }, 1000);
     }
-
-    emoji.onclick = () => {
-      const endTime = Date.now();
-      const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
-
-      totalLaughs++;
-      if (!bestTime || timeTaken < bestTime) {
-        bestTime = timeTaken;
-      }
-
-      message.innerHTML = `🎉 You found it in <strong>${timeTaken}</strong> seconds!`;
-      totalSpan.textContent = totalLaughs;
-      bestSpan.textContent = bestTime;
-
-      clearInterval(timer);
-      emoji.style.display = "none";
-      restartBtn.style.display = "inline-block";
-    };
   </script>
 </body>
 </html>
-
