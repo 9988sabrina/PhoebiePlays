@@ -107,5 +107,154 @@
       }
     }
   </script>
+<script>
+let totalLaughs = 0;
+let bestTime = null;
+let startTime;
+let timer;
+let gameTime = 10;
+let emojiSize = 60;
+let intervalMover;
+
+const message = document.getElementById('message');
+const totalSpan = document.getElementById('total');
+const bestSpan = document.getElementById('best');
+const timeLeftDisplay = document.getElementById('timeLeft');
+const jokeBox = document.getElementById('jokeBox');
+const restartBtn = document.getElementById('restartBtn');
+const body = document.body;
+
+const jokes = [
+  { question: "Why don't eggs tell jokes?", answer: "They'd crack each other up! 🥚😂" },
+  { question: "Why did the math book look sad?", answer: "It had too many problems! 📚😢" },
+  { question: "Why did the scarecrow win an award?", answer: "Because he was outstanding in his field! 🌾🏆" },
+  { question: "Why can’t Elsa have a balloon?", answer: "Because she’ll let it go! ❄️🎈" },
+  { question: "What kind of tree fits in your hand?", answer: "A palm tree! 🌴✋" },
+  { question: "Why did the teddy bear say no to dessert?", answer: "Because it was stuffed! 🧸🍰" },
+  { question: "How does the moon cut its hair?", answer: "Eclipse it! 🌕✂️" },
+  { question: "Why did the cookie go to the doctor?", answer: "Because it felt crumby! 🍪😷" },
+  { question: "What do you call a fish wearing a bowtie?", answer: "Sofishticated! 🎣👔" },
+  { question: "Why did the bicycle fall over?", answer: "Because it was two-tired! 🚲😴" },
+  { question: "Why was the computer cold?", answer: "Because it left its Windows open! 💻❄️" },
+  { question: "Why did the banana go to the doctor?", answer: "Because it wasn’t peeling well! 🍌😷" },
+  { question: "Why don’t scientists trust atoms?", answer: "Because they make up everything! ⚛️😂" },
+  { question: "Why did the chicken join a band?", answer: "Because it had the drumsticks! 🐔🥁" },
+  { question: "What do you call cheese that isn’t yours?", answer: "Nacho cheese! 🧀😂" },
+  { question: "How do you make a tissue dance?", answer: "Put a little boogie in it! 🤧🕺" },
+  { question: "Why did the golfer bring two pairs of pants?", answer: "In case he got a hole in one! ⛳👖" },
+  { question: "What do elves use to take notes?", answer: "Their elf-abet! 🧝📖" },
+  { question: "Why did the mushroom go to the party?", answer: "Because he was a fungi! 🍄🎉" },
+  { question: "What kind of music do mummies listen to?", answer: "Wrap music! 🧻🎶" },
+  { question: "Why don’t skeletons fight each other?", answer: "They don’t have the guts! ☠️🤣" },
+  { question: "Why did the orange stop halfway up the hill?", answer: "It ran out of juice! 🍊🔋" },
+  { question: "Why did the lion eat the tightrope walker?", answer: "He wanted a well-balanced meal! 🦁🎪" },
+  { question: "Why did the fish blush?", answer: "Because it saw the ocean’s bottom! 🐠🌊" },
+  { question: "What do you call a cow that can play an instrument?", answer: "A moo-sician! 🐄🎸" },
+  { question: "Why don’t seagulls fly over the bay?", answer: "Because then they'd be bagels! 🥯🕊️" },
+  { question: "What did one snowman say to the other?", answer: "Do you smell carrots? ☃️🥕" },
+  { question: "Why did the student eat his homework?", answer: "Because the teacher said it was a piece of cake! 🎂📚" },
+  { question: "What did the grape do when it got stepped on?", answer: "Nothing, it just let out a little wine! 🍇😜" },
+  { question: "Why did the robot go on vacation?", answer: "It needed to recharge its batteries! 🤖🔋" }
+];
+
+function showRandomJoke() {
+  const randomIndex = Math.floor(Math.random() * jokes.length);
+  const joke = jokes[randomIndex];
+  jokeBox.innerHTML = `<strong>${joke.question}</strong>`;
+  setTimeout(() => {
+    jokeBox.innerHTML += `<br><em>${joke.answer}</em>`;
+  }, 5000);
+}
+
+function addNewJoke() {
+  const question = prompt("What's your joke question?");
+  const answer = prompt("What's the punchline?");
+  if (question && answer) {
+    jokes.push({ question, answer });
+    alert("Your joke was added! It might appear next time. 🎉");
+  }
+}
+
+function removeAllEmojis() {
+  document.querySelectorAll(".emoji").forEach(e => e.remove());
+}
+
+function moveEmoji(el) {
+  const x = Math.random() * (window.innerWidth - emojiSize);
+  const y = Math.random() * (window.innerHeight - emojiSize);
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+}
+
+function createEmoji(char, isReal = false) {
+  const el = document.createElement("div");
+  el.classList.add("emoji");
+  el.innerText = char;
+  el.style.fontSize = emojiSize + "px";
+  moveEmoji(el);
+  body.appendChild(el);
+
+  if (isReal) {
+    el.id = "realEmoji";
+    el.onclick = () => {
+      const endTime = Date.now();
+      const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+      totalLaughs++;
+      if (!bestTime || timeTaken < bestTime) bestTime = timeTaken;
+      message.innerHTML = `🎉 You found it in <strong>${timeTaken}</strong> seconds!`;
+      totalSpan.textContent = totalLaughs;
+      bestSpan.textContent = bestTime;
+      clearInterval(timer);
+      clearInterval(intervalMover);
+      removeAllEmojis();
+      restartBtn.style.display = "inline-block";
+      gameTime = Math.max(2, gameTime - 0.5);
+      emojiSize = Math.max(20, emojiSize - 5);
+      showRandomJoke();
+    };
+  } else {
+    el.onclick = () => {
+      message.innerHTML = "😜 Oops! Wrong one! Try again.";
+      clearInterval(timer);
+      clearInterval(intervalMover);
+      removeAllEmojis();
+      restartBtn.style.display = "inline-block";
+      showRandomJoke();
+    };
+  }
+}
+
+function startGame() {
+  message.innerText = "";
+  restartBtn.style.display = "none";
+  emojiSize = emojiSize;
+  timeLeftDisplay.innerText = gameTime;
+  removeAllEmojis();
+  jokeBox.innerHTML = "";
+
+  createEmoji("😆", true);
+  createEmoji("😝");
+  createEmoji("🤪");
+
+  intervalMover = setInterval(() => {
+    document.querySelectorAll(".emoji").forEach(e => moveEmoji(e));
+  }, 800);
+
+  startTime = Date.now();
+  let timeLeft = gameTime;
+  timer = setInterval(() => {
+    timeLeft--;
+    timeLeftDisplay.innerText = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      clearInterval(intervalMover);
+      message.innerHTML = "⏰ Time’s up! Try again!";
+      removeAllEmojis();
+      restartBtn.style.display = "inline-block";
+      showRandomJoke();
+    }
+  }, 1000);
+}
+</script>
 </body>
 </html>
